@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"sync"
 	"time"
+	"net"
+	"net/http"
 
 	"github.com/ddo/pick-json"
 	"github.com/ddo/rq"
@@ -41,17 +43,54 @@ type Fast struct {
 	client *client.Client
 }
 
+type Option struct {
+	bindAddress string
+}
+
 // New creates empty Fast instance with a http client
-func New() *Fast {
+func New(opt *Option) (f *Fast, err error)  {
+	if opt == nil {
+		opt = &Option{}
+	}
+	
 	// default client
 	defaultRq := rq.Get(endpoint)
 	defaultRq.Set("User-Agent", userAgent)
 
-	return &Fast{
+	// https://stackoverflow.com/questions/33768557/how-to-bind-an-http-client-in-go-to-an-ip-address 
+	bindAddress := opt.bindAddress
+	if len(opt.bindAddress) == 0 {
+		bindAddress = "0.0.0.0"
+	}
+
+	localAddr, err := net.ResolveIPAddr("ip", bindAddress)
+	if err != nil {
+		return
+	}
+
+	// convert to TCP address 
+	tcpAddr := net.TCPAddr {
+		IP: localAddr.IP,
+	}
+
+	dialer := net.Dialer {
+		LocalAddr: &tcpAddr,
+	}
+
+	var transport http.RoundTripper = &http.Transport {
+		Dial: dialer.Dial,
+	}
+
+	debug.Info("Bind Address:", bindAddress)
+
+	f = &Fast{
 		client: client.New(&client.Option{
 			DefaultRq: defaultRq,
+			Transport: transport,
 		}),
 	}
+
+	return
 }
 
 // Init inits token and url
