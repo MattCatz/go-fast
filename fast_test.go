@@ -17,12 +17,12 @@ func TestNew(t *testing.T) {
 	f, err = New(nil)
 
 	if err != nil {
-		t.Error()
+		t.Error(err)
 		return
 	}
 
 	if f.client == nil {
-		t.Error()
+		t.Error(err)
 	}
 }
 
@@ -30,20 +30,20 @@ func TestInit(t *testing.T) {
 	err := f.Init()
 
 	if err != nil {
-		t.Error()
+		t.Error(err)
 		return
 	}
 
 	if f.url == "" {
-		t.Error()
+		t.Error(err)
 	}
 
 	if f.token == "" {
-		t.Error()
+		t.Error(err)
 	}
 
 	if f.urlCount == 0 {
-		t.Error()
+		t.Error(err)
 	}
 }
 
@@ -51,12 +51,12 @@ func TestGetUrls(t *testing.T) {
 	urls, err := f.GetUrls()
 
 	if err != nil {
-		t.Error()
+		t.Error(err)
 		return
 	}
 
 	if len(urls) != f.urlCount {
-		t.Error()
+		t.Error(err)
 	}
 
 	testing_urls = urls
@@ -77,7 +77,7 @@ func TestDownload(t *testing.T) {
 	err := f.download(testing_urls[0], byteLenChan, done)
 
 	if err != nil {
-		t.Error()
+		t.Error(err)
 		return
 	}
 
@@ -105,7 +105,7 @@ func TestDownloadStop(t *testing.T) {
 	err := f.download(testing_urls[0], byteLenChan, done)
 
 	if err != nil {
-		t.Error()
+		t.Error(err)
 		return
 	}
 
@@ -126,7 +126,7 @@ func TestMeasure(t *testing.T) {
 	err := f.Measure(testing_urls, KbpsChan)
 
 	if err != nil {
-		t.Error()
+		t.Error(err)
 		return
 	}
 
@@ -164,7 +164,7 @@ func TestBind(t *testing.T) {
 	})
 
 	if err != nil {
-		t.Error()
+		t.Error(err)
 		return
 	}
 
