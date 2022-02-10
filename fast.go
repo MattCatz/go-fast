@@ -44,7 +44,7 @@ type Fast struct {
 }
 
 type Option struct {
-	bindAddress string
+	BindAddress string
 }
 
 // New creates empty Fast instance with a http client
@@ -58,8 +58,8 @@ func New(opt *Option) (f *Fast, err error)  {
 	defaultRq.Set("User-Agent", userAgent)
 
 	// https://stackoverflow.com/questions/33768557/how-to-bind-an-http-client-in-go-to-an-ip-address 
-	bindAddress := opt.bindAddress
-	if len(opt.bindAddress) == 0 {
+	bindAddress := opt.BindAddress
+	if len(opt.BindAddress) == 0 {
 		bindAddress = "0.0.0.0"
 	}
 

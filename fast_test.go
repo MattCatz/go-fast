@@ -138,7 +138,7 @@ func TestBadBind(t *testing.T) {
 
 	// The Download should fail is the server is unreachable from the bound address
 	f, err = New(&Option{
-		bindAddress: "127.0.0.1",
+		BindAddress: "127.0.0.1",
 	})
 
 	err = f.Init()
@@ -160,7 +160,7 @@ func TestBind(t *testing.T) {
     localAddr := conn.LocalAddr().(*net.UDPAddr)
 	
 	f, err = New(&Option{
-		bindAddress: localAddr.IP.String(),
+		BindAddress: localAddr.IP.String(),
 	})
 
 	if err != nil {
